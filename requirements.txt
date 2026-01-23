@@ -1,21 +1,10 @@
-langchain==0.3.26
-langchain>=0.3.0
-langchain-community>=0.3.0
-langchain-ollama>=0.2.0
-chromadb>=0.5.0
-ollama>=0.4.0
-sentence-transformers==4.1.0
-pypdf==5.6.1
-python-dotenv==1.0.1
-
-# Web scraping
-beautifulsoup4>=4.12.0
-requests>=2.31.0
-lxml>=5.0.0
-
-# Voice input
-SpeechRecognition>=3.10.0
-# Chat interface
-gradio>=5.0.0
-pandas
--e .
+langchain>=0.3.0,<0.4.0
+langchain-core>=0.3.0,<1.0.0
+langchain-community>=0.3.0,<0.4.0
+langchain-chroma
+langchain-ollama
+chromadb
+gradio
+beautifulsoup4
+pypdf
+SpeechRecognition
