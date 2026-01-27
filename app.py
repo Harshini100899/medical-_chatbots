@@ -255,7 +255,8 @@ def create_interface():
         neutral_hue="slate",
     )
     
-    with gr.Blocks(title="Medical Chatbot - Platform4AI", theme=theme, css=custom_css) as demo:
+    # NOTE: In Gradio 6.0+, theme and css are passed to launch() not Blocks()
+    with gr.Blocks(title="Medical Chatbot - Platform4AI") as demo:
         
         with gr.Row():
             gr.Markdown("""
@@ -570,7 +571,7 @@ def create_interface():
             gr.Markdown("""
             ### Instructions
             
-            1. **First time setup:** Click "🔄 Full Refresh" to process PDFs and crawl all websites
+            1. **First time setup:** Run `python crawler.py` first, then click "🔄 Full Refresh"
             2. **Regular updates:** Click "⚡ Quick Update" - only processes new/changed content (much faster!)
             3. **Web crawling:** Disable to only use PDF content
             
@@ -584,9 +585,15 @@ def create_interface():
             ### Requirements
             
             - Ollama must be running (`ollama serve`)
-            - Models required: `llama3.2`, `nomic-embed-text`
+            - Models required: `mistral-nemo`, `nomic-embed-text`
+            
+            To pull the models:
+            ```
+            ollama pull mistral-nemo
+            ollama pull nomic-embed-text
+            ```
             """)
-            gr.Markdown("> Doctors directory data from `doctors.jsonl` is included in ingestion. Keep the file in the project root before running updates.")
+            gr.Markdown("> Doctors directory data from `doctors.jsonl` is included in ingestion. Run `python crawler.py` first to populate it.")
         
         with gr.Tab("ℹ️ About"):
             gr.Markdown("""
@@ -596,23 +603,35 @@ def create_interface():
             accurate answers based on trusted medical sources.
             
             **Technology Stack:**
-            - 🤖 **LLM:** Llama 3.2 (via Ollama)
+            - 🤖 **LLM:** Mistral-Nemo 12B (via Ollama)
             - 📊 **Embeddings:** nomic-embed-text
             - 🗄️ **Vector Store:** ChromaDB
             - 🌐 **Interface:** Gradio
             - 🔗 **Framework:** LangChain
+            - ✅ **Validation:** Pydantic v2
             
             **Data Sources:**
-            - Local PDF medical documents
-            - **arzt-auskunft.de** (German doctor directory)
-            - **gesundheitsinformation.de** (German health information)
-            - **gesund.bund.de** (Federal Ministry of Health portal)
-            - **kvno.de** (Association of Statutory Health Insurance Physicians North Rhine)
+            - 📄 Local PDF medical documents
+            - 🏥 **arzt-auskunft.de** (German doctor directory - structured extraction)
+            - 📚 **gesundheitsinformation.de** (German health information)
+            - 🏛️ **gesund.bund.de** (Federal Ministry of Health portal)
+            
+            **Features:**
+            - 🌍 Multilingual support (English/German)
+            - 🎤 Voice input with speech recognition
+            - 💡 Smart follow-up suggestions
+            - 📈 Confidence scoring
+            - 📚 Source citations
+            - 💾 Conversation history
             
             ---
             
             *Built for Platform4AI*
             """)
+    
+    # Store theme and css for launch()
+    demo._custom_theme = theme
+    demo._custom_css = custom_css
     
     return demo
 
@@ -623,13 +642,14 @@ if __name__ == "__main__":
         print("⚠️  Knowledge base not found. Please initialize it from the Settings tab.")
     
     if not check_doctors_file_exists():
-        print("⚠️  doctors.jsonl not found. Structured data will be missing from ingestion.")
+        print("⚠️  doctors.jsonl not found. Run 'python crawler.py' first to crawl doctor data.")
 
     # Launch the app
     demo = create_interface()
     demo.launch(
         server_name="0.0.0.0",
-        server_port=7860,
+        server_port=7861,
         share=False,
-        inbrowser=True
+        inbrowser=True,
+        # Gradio 6.0+: pass theme and css to launch()
     )

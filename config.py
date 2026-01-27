@@ -16,9 +16,10 @@ CRAWL_URLS = [
 
 # Vector store
 CHROMA_DB_DIR = os.path.join(BASE_DIR, "chroma_db")
+COLLECTION_NAME = "medical_docs"
 
 # Ollama models
-LLM_MODEL = "mistral-nemo"  # 12B model - better quality for medical responses
+LLM_MODEL = "mistral:latest"  # Ollama model name for Mistral 7B
 EMBEDDING_MODEL = "nomic-embed-text"
 
 # Mistral model parameters (optimized for medical chatbot)
@@ -34,3 +35,7 @@ CHUNK_OVERLAP = 50
 
 # RAG parameters
 TOP_K_RESULTS = 4
+
+# Crawling settings
+MAX_PAGES_PER_SITE = 100
+CRAWL_DELAY = 0.3

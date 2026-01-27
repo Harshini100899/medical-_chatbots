@@ -82,10 +82,11 @@ class MedicalChatbot:
         print("Loading vector store...")
         self.vector_store = load_vector_store()
         
-        print("Initializing LLM...")
+        print(f"Initializing LLM ({LLM_MODEL})...")
         self.llm = ChatOllama(
             model=LLM_MODEL,
-            temperature=0.3
+            temperature=0.3,
+            num_ctx=4096,  # Context window for Mistral 7B
         )
     
     def set_language(self, language: str):
